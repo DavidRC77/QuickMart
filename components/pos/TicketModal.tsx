@@ -40,25 +40,25 @@ export function TicketModal({ isOpen, sale, onClose }: Props) {
           </button>
         </div>
 
-        {/* Vista previa del ticket térmico */}
-        <div className="overflow-y-auto flex-1 p-2">
+        {/* Vista previa del ticket */}
+        <div className="overflow-y-auto flex-1 p-1">
           <div
             id="printable-ticket"
-            className="bg-white text-slate-900 rounded-2xl p-6 text-xs font-mono shadow-inner border border-gray-200 leading-tight"
+            className="bg-white text-slate-900 rounded-2xl p-5 text-xs font-mono shadow-inner border border-gray-200 leading-normal"
           >
             {/* Header del Ticket */}
             <div className="text-center space-y-1 pb-3 border-b border-dashed border-gray-300">
               <div className="flex items-center justify-center gap-1 text-base font-black tracking-tight text-slate-900 uppercase">
                 <ShoppingBag className="w-4 h-4" /> QuickMart
               </div>
-              <p className="text-[10px] text-gray-600">Micromercado & Punto de Venta</p>
-              <p className="text-[10px] text-gray-600">NIT: 1029384756 | Tel: 70000000</p>
+              <p className="text-[11px] text-gray-600">Micromercado</p>
+              <p className="text-[11px] text-gray-600">NIT: 1029384756 | Tel: 70000000</p>
               <div className="pt-2 font-bold text-sm text-emerald-700">{sale.numero_factura}</div>
-              <p className="text-[10px] text-gray-500">{new Date(sale.fecha).toLocaleString()}</p>
+              <p className="text-[11px] text-gray-500">{new Date(sale.fecha).toLocaleString()}</p>
             </div>
 
             {/* Datos del Cliente y Cajero */}
-            <div className="py-3 border-b border-dashed border-gray-300 space-y-1">
+            <div className="py-3 border-b border-dashed border-gray-300 space-y-1 text-xs">
               <div className="flex justify-between">
                 <span className="text-gray-500">Cliente:</span>
                 <span className="font-bold text-slate-800 uppercase">{sale.razon_social}</span>
@@ -74,14 +74,14 @@ export function TicketModal({ isOpen, sale, onClose }: Props) {
             </div>
 
             {/* Detalle de Productos */}
-            <div className="py-3 border-b border-dashed border-gray-300 space-y-2">
-              <div className="grid grid-cols-12 font-bold text-[10px] text-gray-500 uppercase pb-1 border-b border-gray-200">
+            <div className="py-3 border-b border-dashed border-gray-300 space-y-2 text-xs">
+              <div className="grid grid-cols-12 font-bold text-[11px] text-gray-500 uppercase pb-1 border-b border-gray-200">
                 <span className="col-span-6">Producto</span>
                 <span className="col-span-2 text-center">Cant</span>
                 <span className="col-span-4 text-right">Subtotal</span>
               </div>
               {sale.detalles.map((item, idx) => (
-                <div key={idx} className="grid grid-cols-12 text-[11px] items-center">
+                <div key={idx} className="grid grid-cols-12 text-xs items-center">
                   <span className="col-span-6 truncate font-medium text-slate-900">{item.producto_nombre || 'Producto'}</span>
                   <span className="col-span-2 text-center text-slate-600">{item.cantidad}</span>
                   <span className="col-span-4 text-right font-bold text-slate-900">Bs. {item.subtotal.toFixed(2)}</span>
@@ -90,22 +90,22 @@ export function TicketModal({ isOpen, sale, onClose }: Props) {
             </div>
 
             {/* Totales y Método de Pago */}
-            <div className="pt-3 space-y-1">
+            <div className="pt-3 space-y-1 text-xs">
               <div className="flex justify-between text-sm font-black text-slate-900 pt-1">
                 <span>TOTAL A PAGAR:</span>
                 <span className="text-emerald-700">Bs. {sale.total.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-[11px] text-gray-600">
+              <div className="flex justify-between text-xs text-gray-600">
                 <span>Método de Pago:</span>
                 <span className="font-bold uppercase">{sale.metodo_pago}</span>
               </div>
               {sale.metodo_pago === 'efectivo' && (
                 <>
-                  <div className="flex justify-between text-[11px] text-gray-600">
+                  <div className="flex justify-between text-xs text-gray-600">
                     <span>Monto Recibido:</span>
                     <span>Bs. {sale.monto_recibido.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between text-[11px] font-bold text-slate-800">
+                  <div className="flex justify-between text-xs font-bold text-slate-800">
                     <span>Cambio / Vuelto:</span>
                     <span>Bs. {sale.cambio.toFixed(2)}</span>
                   </div>
@@ -114,7 +114,7 @@ export function TicketModal({ isOpen, sale, onClose }: Props) {
             </div>
 
             {/* Mensaje de agradecimiento */}
-            <div className="text-center pt-4 border-t border-dashed border-gray-300 mt-4 text-[10px] text-gray-500">
+            <div className="text-center pt-4 border-t border-dashed border-gray-300 mt-4 text-xs text-gray-500">
               <p className="font-bold">¡Gracias por su compra en QuickMart!</p>
               <p>Conserve este ticket para cualquier reclamo</p>
             </div>

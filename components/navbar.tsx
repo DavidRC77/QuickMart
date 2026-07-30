@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { User } from '../lib/models/types';
-import { ShoppingBag, LayoutDashboard, LogOut, UserCheck } from 'lucide-react';
+import { ShoppingBag, LayoutDashboard, LogOut } from 'lucide-react';
 
 interface Props {
   user: User | null;
@@ -29,7 +29,7 @@ export function Navbar({ user, onLogout }: Props) {
             <span className="text-xl font-extrabold tracking-tight text-white flex items-center gap-1">
               Quick<span className="text-emerald-400">Mart</span>
             </span>
-            <span className="text-[10px] text-gray-400 block -mt-1 font-medium">Micromercado POS</span>
+            <span className="text-[10px] text-gray-400 block -mt-1 font-medium">Micromercado</span>
           </div>
         </Link>
 

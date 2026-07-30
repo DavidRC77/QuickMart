@@ -20,6 +20,7 @@ import {
   Check,
   AlertCircle,
   Package,
+  RotateCcw,
 } from 'lucide-react';
 
 export default function POSPage() {
@@ -41,12 +42,15 @@ export default function POSPage() {
     );
   }
 
-  // Filtrado manual de productos
-  const searchResults = pos.products.filter(
-    (p) =>
-      p.nombre.toLowerCase().includes(manualSearch.toLowerCase()) ||
-      p.codigo_barras.includes(manualSearch.trim())
-  );
+  // Filtrado reactivo de productos SOLO cuando el usuario escribe en el buscador
+  const isSearching = manualSearch.trim().length > 0;
+  const searchResults = isSearching
+    ? pos.products.filter(
+        (p) =>
+          p.nombre.toLowerCase().includes(manualSearch.toLowerCase()) ||
+          p.codigo_barras.includes(manualSearch.trim())
+      )
+    : [];
 
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -64,11 +68,87 @@ export default function POSPage() {
         </div>
       )}
 
-      {/* COLUMNA IZQUIERDA: Catálogo, Buscador y Escáner (7 Cols) */}
+      {/* COLUMNA IZQUIERDA: Cliente primero, luego Buscador/Cámara y Resultados (7 Cols) */}
       <div className="lg:col-span-7 space-y-4 flex flex-col">
-        {/* Barra Superior de Búsqueda y Cámara */}
+        {/* 1. SECCIÓN SUPERIOR: Datos de Facturación / Cliente */}
+        <div className="glass-panel p-5 rounded-3xl border border-gray-800 space-y-3">
+          <div className="flex justify-between items-center">
+            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <User className="w-4 h-4 text-emerald-400" /> Facturación / Datos del Cliente
+            </h3>
+            {/* Botón Limpiar NIT */}
+            <button
+              type="button"
+              onClick={() => {
+                pos.handleResetCustomer();
+                setShowNewCustomerForm(false);
+              }}
+              className="text-xs text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1 bg-emerald-500/10 px-3 py-1 rounded-xl border border-emerald-500/20 transition-colors"
+            >
+              <RotateCcw className="w-3.5 h-3.5" /> Limpiar
+            </button>
+          </div>
+
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Ingrese NIT o CI del cliente..."
+              value={pos.customerSearchNit}
+              onChange={(e) => pos.handleSearchCustomer(e.target.value)}
+              className="flex-1 bg-gray-950/80 border border-gray-800 focus:border-emerald-500 text-white rounded-xl px-3 py-2 text-sm outline-none font-mono transition-colors"
+            />
+          </div>
+
+          {pos.customerNotFound ? (
+            <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl space-y-2">
+              <p className="text-xs text-amber-300 font-semibold flex items-center gap-1.5">
+                <AlertCircle className="w-4 h-4" /> NIT/CI no registrado en la base de datos.
+              </p>
+              {!showNewCustomerForm ? (
+                <button
+                  type="button"
+                  onClick={() => setShowNewCustomerForm(true)}
+                  className="w-full py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1 transition-colors"
+                >
+                  <UserPlus className="w-3.5 h-3.5" /> Registrar Cliente Ahora
+                </button>
+              ) : (
+                <div className="space-y-2 pt-1">
+                  <input
+                    type="text"
+                    placeholder="Razón Social / Nombre Completo"
+                    value={newCustomerRazon}
+                    onChange={(e) => setNewCustomerRazon(e.target.value)}
+                    className="w-full bg-gray-950 border border-amber-500/40 text-white rounded-xl px-3 py-1.5 text-xs outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (newCustomerRazon.trim()) {
+                        pos.handleRegisterCustomer(newCustomerRazon);
+                        setShowNewCustomerForm(false);
+                      }
+                    }}
+                    className="w-full py-1.5 bg-amber-500 text-slate-950 font-bold rounded-xl text-xs transition-colors"
+                  >
+                    Guardar Cliente
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="p-3 bg-gray-900/80 border border-gray-800 rounded-2xl flex justify-between items-center">
+              <div>
+                <span className="text-[10px] text-gray-500 uppercase font-bold block">Razón Social / Nombre</span>
+                <span className="text-sm font-bold text-white uppercase">{pos.customer.razon_social}</span>
+              </div>
+              <span className="text-xs text-emerald-400 font-mono font-bold">NIT: {pos.customer.nit_ci}</span>
+            </div>
+          )}
+        </div>
+
+        {/* 2. BARRA DE BÚSQUEDA MANUAL & ESCÁNER DE CÁMARA */}
         <div className="glass-panel p-4 rounded-3xl border border-gray-800 flex flex-col sm:flex-row gap-3 items-center">
-          {/* Buscador Manual */}
           <div className="relative flex-1 w-full">
             <Search className="w-5 h-5 text-gray-400 absolute left-3.5 top-3" />
             <input
@@ -80,7 +160,6 @@ export default function POSPage() {
             />
           </div>
 
-          {/* Botón Escáner Cámara */}
           <button
             type="button"
             onClick={() => pos.setCameraScannerOpen(true)}
@@ -91,28 +170,41 @@ export default function POSPage() {
           </button>
         </div>
 
-        {/* Catálogo de Productos con Escaneo Directo */}
-        <div className="glass-panel p-5 rounded-3xl border border-gray-800 flex-1 flex flex-col min-h-[500px]">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Barcode className="w-5 h-5 text-emerald-400" /> Catálogo & Resultados
+        {/* 3. RESULTADOS DE LA BÚSQUEDA */}
+        <div className="glass-panel p-5 rounded-3xl border border-gray-800 flex-1 flex flex-col min-h-[300px]">
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-sm font-bold text-white flex items-center gap-2">
+              <Barcode className="w-4 h-4 text-emerald-400" /> Resultados de Búsqueda
             </h2>
-            <span className="text-xs text-gray-400 font-medium">
-              {searchResults.length} productos disponibles
-            </span>
+            {isSearching && (
+              <span className="text-xs text-emerald-400 font-medium">
+                {searchResults.length} coincidencias encontradas
+              </span>
+            )}
           </div>
 
-          {searchResults.length === 0 ? (
+          {!isSearching ? (
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-8 text-gray-500 space-y-2">
+              <Barcode className="w-12 h-12 stroke-1 opacity-40 text-emerald-400" />
+              <p className="text-sm font-medium text-gray-300">Listo para escanear productos</p>
+              <p className="text-xs text-gray-500 max-w-sm">
+                Usa la pistola lectora USB, activa la cámara o escribe el nombre/código de barras arriba para agregar ítems.
+              </p>
+            </div>
+          ) : searchResults.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-8 text-gray-500">
-              <Package className="w-12 h-12 mb-2 stroke-1 opacity-50" />
-              <p className="text-sm font-medium">No se encontraron productos coincidentes.</p>
+              <Package className="w-10 h-10 mb-2 stroke-1 opacity-40" />
+              <p className="text-sm font-medium">No se encontraron productos con "{manualSearch}".</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 overflow-y-auto max-h-[550px] pr-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 overflow-y-auto max-h-[400px] pr-1">
               {searchResults.map((product) => (
                 <div
                   key={product.id}
-                  onClick={() => pos.handleBarcodeScanned(product.codigo_barras)}
+                  onClick={() => {
+                    pos.handleBarcodeScanned(product.codigo_barras);
+                    setManualSearch('');
+                  }}
                   className={`glass-card p-4 rounded-2xl border cursor-pointer flex flex-col justify-between space-y-3 ${
                     product.stock_actual <= 0
                       ? 'opacity-50 border-red-500/20 bg-red-950/10 cursor-not-allowed'
@@ -155,85 +247,8 @@ export default function POSPage() {
         </div>
       </div>
 
-      {/* COLUMNA DERECHA: Carrito y Cliente (5 Cols) */}
+      {/* COLUMNA DERECHA: Carrito de Compras y Procesamiento de Pago (5 Cols) */}
       <div className="lg:col-span-5 space-y-4 flex flex-col">
-        {/* Gestión de Cliente / NIT */}
-        <div className="glass-panel p-5 rounded-3xl border border-gray-800 space-y-3">
-          <div className="flex justify-between items-center">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <User className="w-4 h-4 text-emerald-400" /> Facturación / Cliente
-            </h3>
-            <button
-              type="button"
-              onClick={() => {
-                pos.handleSearchCustomer('0');
-                setShowNewCustomerForm(false);
-              }}
-              className="text-[11px] font-semibold text-emerald-400 hover:underline"
-            >
-              Sin Datos (Anónimo)
-            </button>
-          </div>
-
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Ingrese NIT o CI..."
-              value={pos.customerSearchNit}
-              onChange={(e) => pos.handleSearchCustomer(e.target.value)}
-              className="flex-1 bg-gray-950/80 border border-gray-800 focus:border-emerald-500 text-white rounded-xl px-3 py-2 text-sm outline-none transition-colors"
-            />
-          </div>
-
-          {pos.customerNotFound ? (
-            <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl space-y-2">
-              <p className="text-xs text-amber-300 font-semibold flex items-center gap-1.5">
-                <AlertCircle className="w-4 h-4" /> NIT/CI no registrado en la BD.
-              </p>
-              {!showNewCustomerForm ? (
-                <button
-                  type="button"
-                  onClick={() => setShowNewCustomerForm(true)}
-                  className="w-full py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1 transition-colors"
-                >
-                  <UserPlus className="w-3.5 h-3.5" /> Registrar Cliente Ahora
-                </button>
-              ) : (
-                <div className="space-y-2 pt-1">
-                  <input
-                    type="text"
-                    placeholder="Razón Social / Nombre Completo"
-                    value={newCustomerRazon}
-                    onChange={(e) => setNewCustomerRazon(e.target.value)}
-                    className="w-full bg-gray-950 border border-amber-500/40 text-white rounded-xl px-3 py-1.5 text-xs outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (newCustomerRazon.trim()) {
-                        pos.handleRegisterCustomer(newCustomerRazon);
-                        setShowNewCustomerForm(false);
-                      }
-                    }}
-                    className="w-full py-1.5 bg-amber-500 text-slate-950 font-bold rounded-xl text-xs transition-colors"
-                  >
-                    Guardar Cliente
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="p-3 bg-gray-900/80 border border-gray-800 rounded-2xl flex justify-between items-center">
-              <div>
-                <span className="text-[10px] text-gray-500 uppercase font-bold block">Razón Social / Nombre</span>
-                <span className="text-sm font-bold text-white">{pos.customer.razon_social}</span>
-              </div>
-              <span className="text-xs text-gray-400 font-mono">NIT: {pos.customer.nit_ci}</span>
-            </div>
-          )}
-        </div>
-
-        {/* Tabla / Lista de Carrito */}
         <div className="glass-panel p-5 rounded-3xl border border-gray-800 flex-1 flex flex-col justify-between">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -250,11 +265,11 @@ export default function POSPage() {
             )}
           </div>
 
-          <div className="flex-1 overflow-y-auto max-h-[300px] space-y-2 pr-1 my-2">
+          <div className="flex-1 overflow-y-auto max-h-[380px] space-y-2 pr-1 my-2">
             {pos.cart.length === 0 ? (
-              <div className="h-48 flex flex-col items-center justify-center text-center text-gray-500">
+              <div className="h-64 flex flex-col items-center justify-center text-center text-gray-500">
                 <ShoppingCart className="w-10 h-10 mb-2 stroke-1 opacity-40" />
-                <p className="text-xs">El carrito está vacío. Escanea o selecciona productos.</p>
+                <p className="text-xs">El carrito está vacío. Escanea o busca productos arriba.</p>
               </div>
             ) : (
               pos.cart.map((item) => (

@@ -43,14 +43,14 @@ export default function LoginPage() {
           <h1 className="text-3xl font-extrabold text-white tracking-tight">
             Quick<span className="text-emerald-400">Mart</span>
           </h1>
-          <p className="text-sm text-gray-400">Sistema de Punto de Venta & Control de Inventarios</p>
+          <p className="text-sm font-medium text-gray-400">Tu micromercado de confianza</p>
         </div>
 
         {/* Card Form */}
         <div className="glass-panel p-8 rounded-3xl border border-gray-800 shadow-2xl space-y-6">
           <div className="border-b border-gray-800 pb-4">
             <h2 className="text-xl font-bold text-white">Iniciar Sesión</h2>
-            <p className="text-xs text-gray-400 mt-1">Ingresa tus credenciales autorizadas para acceder al sistema</p>
+            <p className="text-xs text-gray-400 mt-1">Ingresa tu correo y contraseña para acceder</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -101,7 +101,7 @@ export default function LoginPage() {
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               ) : (
                 <>
-                  <span>Ingresar al Sistema</span>
+                  <span>Iniciar Sesión</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}

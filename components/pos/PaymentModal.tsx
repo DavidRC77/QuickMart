@@ -33,8 +33,8 @@ export function PaymentModal({ isOpen, total, customerName, customerNit, onClose
     onConfirm(method, method === 'efectivo' ? montoRecibido : total);
   };
 
-  const handlePresetCash = (amount: number) => {
-    setMontoRecibidoStr(amount.toString());
+  const handleExactCash = () => {
+    setMontoRecibidoStr(total.toFixed(2));
     setError(null);
   };
 
@@ -123,43 +123,33 @@ export function PaymentModal({ isOpen, total, customerName, customerNit, onClose
           </div>
         </div>
 
-        {/* Sección Específica según Método */}
+        {/* Sección Específica para Efectivo (Campo + Botón Monto Exacto al lado) */}
         {method === 'efectivo' && (
           <div className="space-y-4 bg-gray-900/80 rounded-2xl p-4 border border-gray-800">
             <div>
               <label className="text-xs text-gray-400 mb-1 block font-medium">Monto Recibido (Bs.)</label>
-              <input
-                type="number"
-                step="0.5"
-                min={total}
-                value={montoRecibidoStr}
-                onChange={(e) => {
-                  setMontoRecibidoStr(e.target.value);
-                  setError(null);
-                }}
-                className="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 text-2xl font-bold text-white rounded-xl px-4 py-2 outline-none transition-colors"
-              />
-            </div>
+              <div className="flex gap-2.5 items-center">
+                <input
+                  type="number"
+                  step="0.5"
+                  min={total}
+                  value={montoRecibidoStr}
+                  onChange={(e) => {
+                    setMontoRecibidoStr(e.target.value);
+                    setError(null);
+                  }}
+                  className="flex-1 bg-gray-950 border border-gray-700 focus:border-emerald-500 text-2xl font-bold text-white rounded-xl px-4 py-2 outline-none transition-colors"
+                />
 
-            {/* Presets de Efectivo rápido */}
-            <div className="flex gap-2 flex-wrap">
-              <button
-                type="button"
-                onClick={() => handlePresetCash(total)}
-                className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-emerald-400 text-xs font-bold rounded-lg border border-gray-700"
-              >
-                Exacto (Bs. {total.toFixed(2)})
-              </button>
-              {[20, 50, 100, 200].map((preset) => (
+                {/* Botón Monto Exacto al lado del campo de texto */}
                 <button
-                  key={preset}
                   type="button"
-                  onClick={() => handlePresetCash(preset)}
-                  className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold rounded-lg border border-gray-700"
+                  onClick={handleExactCash}
+                  className="px-4 py-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-bold text-xs rounded-xl border border-emerald-500/30 transition-colors shrink-0 whitespace-nowrap"
                 >
-                  Bs. {preset}
+                  Monto Exacto
                 </button>
-              ))}
+              </div>
             </div>
 
             {/* Vuelto / Cambio */}
@@ -179,7 +169,6 @@ export function PaymentModal({ isOpen, total, customerName, customerNit, onClose
         {method === 'qr' && (
           <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800 text-center space-y-3">
             <div className="mx-auto w-36 h-36 bg-white p-2 rounded-xl flex items-center justify-center shadow-lg">
-              {/* Código QR generado visualmente */}
               <div className="w-full h-full border-4 border-black p-1 flex flex-col justify-between items-center bg-gray-50">
                 <div className="text-[9px] font-black text-black tracking-tight">QUICKMART QR</div>
                 <QrCode className="w-20 h-20 text-slate-900" />

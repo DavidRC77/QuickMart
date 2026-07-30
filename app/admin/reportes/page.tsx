@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { SaleModel } from '../../../lib/models/saleModel';
 import { DailyReport, Sale } from '../../../lib/models/types';
 import { TicketModal } from '../../../components/pos/TicketModal';
-import { BarChart3, Banknote, QrCode, CreditCard, Calendar, Printer, Eye, DollarSign, ShoppingBag } from 'lucide-react';
+import { BarChart3, Banknote, QrCode, CreditCard, Calendar, Printer, Eye, ShoppingBag } from 'lucide-react';
 
 export default function AdminReportesPage() {
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
@@ -26,13 +26,15 @@ export default function AdminReportesPage() {
   }, [selectedDate, fetchReport]);
 
   const handlePrintReport = () => {
-    window.print();
+    if (typeof window !== 'undefined') {
+      window.print();
+    }
   };
 
   return (
     <div className="space-y-6">
-      {/* Encabezado y Filtro por Fecha */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      {/* Encabezado y Filtro por Fecha (Solo pantalla) */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print:hidden">
         <div>
           <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
             <BarChart3 className="w-6 h-6 text-emerald-400" /> Reporte Diario y Cierre de Caja
@@ -60,100 +62,117 @@ export default function AdminReportesPage() {
         </div>
       </div>
 
-      {/* Grid de Resumen del Día */}
-      {report && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Total Ingresos */}
-          <div className="glass-panel p-5 rounded-3xl border border-emerald-500/30 space-y-1">
-            <span className="text-xs font-semibold text-gray-400 uppercase">Total Ingresos</span>
-            <div className="text-3xl font-extrabold text-emerald-400">Bs. {report.totalIngresos.toFixed(2)}</div>
-            <span className="text-[11px] text-gray-400 block">{report.totalVentas} transacciones en la fecha</span>
-          </div>
-
-          {/* Desglose Efectivo */}
-          <div className="glass-panel p-5 rounded-3xl border border-emerald-500/20 space-y-1">
-            <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase">
-              <Banknote className="w-4 h-4" /> Ingresos en Efectivo
+      {/* REPORTE IMPRIMIBLE (#printable-report) */}
+      <div id="printable-report" className="space-y-6">
+        {/* Encabezado Formal Exclusivo de Impresión */}
+        <div className="hidden print:block border-b-2 border-black pb-3 mb-4 text-slate-900">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-black uppercase tracking-tight">QUICKMART - MICROMERCADO</h1>
+              <p className="text-xs font-semibold">Reporte Oficial de Cierre Diario de Caja</p>
             </div>
-            <div className="text-2xl font-extrabold text-white">Bs. {report.efectivoTotal.toFixed(2)}</div>
-            <span className="text-[11px] text-gray-400">Arqueo físico de caja</span>
-          </div>
-
-          {/* Desglose QR */}
-          <div className="glass-panel p-5 rounded-3xl border border-indigo-500/20 space-y-1">
-            <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase">
-              <QrCode className="w-4 h-4" /> Ingresos por QR
+            <div className="text-right text-xs">
+              <p className="font-bold">Fecha del Reporte: {selectedDate}</p>
+              <p className="text-gray-600">Emitido: {new Date().toLocaleString()}</p>
             </div>
-            <div className="text-2xl font-extrabold text-white">Bs. {report.qrTotal.toFixed(2)}</div>
-            <span className="text-[11px] text-gray-400">Transferencias recibidas</span>
-          </div>
-
-          {/* Desglose Tarjeta */}
-          <div className="glass-panel p-5 rounded-3xl border border-blue-500/20 space-y-1">
-            <div className="flex items-center gap-2 text-blue-400 text-xs font-bold uppercase">
-              <CreditCard className="w-4 h-4" /> Ingresos por Tarjeta
-            </div>
-            <div className="text-2xl font-extrabold text-white">Bs. {report.tarjetaTotal.toFixed(2)}</div>
-            <span className="text-[11px] text-gray-400">Pagos pos débito/crédito</span>
           </div>
         </div>
-      )}
 
-      {/* Tabla de Ventas Registradas en la Fecha */}
-      <div className="glass-panel rounded-3xl border border-gray-800 overflow-hidden shadow-2xl space-y-3 p-6">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2">
-          <ShoppingBag className="w-5 h-5 text-emerald-400" /> Historial de Transacciones del Día ({report?.ventas.length || 0})
-        </h2>
+        {/* Grid de Resumen del Día */}
+        {report && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Total Ingresos */}
+            <div className="glass-panel p-5 rounded-3xl border border-emerald-500/30 space-y-1">
+              <span className="text-xs font-semibold text-gray-400 print:text-slate-700 uppercase">Total Ingresos</span>
+              <div className="text-3xl font-extrabold text-emerald-400 print:text-black">Bs. {report.totalIngresos.toFixed(2)}</div>
+              <span className="text-[11px] text-gray-400 print:text-slate-600 block">{report.totalVentas} transacciones en la fecha</span>
+            </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-gray-900/90 text-gray-400 uppercase text-[11px] font-bold border-b border-gray-800 tracking-wider">
-              <tr>
-                <th className="px-6 py-4">N° Factura</th>
-                <th className="px-6 py-4">Hora</th>
-                <th className="px-6 py-4">Cliente / Razón Social</th>
-                <th className="px-6 py-4">NIT / CI</th>
-                <th className="px-6 py-4 text-center">Método Pago</th>
-                <th className="px-6 py-4 text-right">Total</th>
-                <th className="px-6 py-4 text-center">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-800/60 font-medium">
-              {!report || report.ventas.length === 0 ? (
+            {/* Desglose Efectivo */}
+            <div className="glass-panel p-5 rounded-3xl border border-emerald-500/20 space-y-1">
+              <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase print:text-black">
+                <Banknote className="w-4 h-4" /> Ingresos en Efectivo
+              </div>
+              <div className="text-2xl font-extrabold text-white print:text-black">Bs. {report.efectivoTotal.toFixed(2)}</div>
+              <span className="text-[11px] text-gray-400 print:text-slate-600">Arqueo físico de caja</span>
+            </div>
+
+            {/* Desglose QR */}
+            <div className="glass-panel p-5 rounded-3xl border border-indigo-500/20 space-y-1">
+              <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase print:text-black">
+                <QrCode className="w-4 h-4" /> Ingresos por QR
+              </div>
+              <div className="text-2xl font-extrabold text-white print:text-black">Bs. {report.qrTotal.toFixed(2)}</div>
+              <span className="text-[11px] text-gray-400 print:text-slate-600">Transferencias recibidas</span>
+            </div>
+
+            {/* Desglose Tarjeta */}
+            <div className="glass-panel p-5 rounded-3xl border border-blue-500/20 space-y-1">
+              <div className="flex items-center gap-2 text-blue-400 text-xs font-bold uppercase print:text-black">
+                <CreditCard className="w-4 h-4" /> Ingresos por Tarjeta
+              </div>
+              <div className="text-2xl font-extrabold text-white print:text-black">Bs. {report.tarjetaTotal.toFixed(2)}</div>
+              <span className="text-[11px] text-gray-400 print:text-slate-600">Pagos pos débito/crédito</span>
+            </div>
+          </div>
+        )}
+
+        {/* Tabla de Ventas Registradas en la Fecha */}
+        <div className="glass-panel rounded-3xl border border-gray-800 overflow-hidden shadow-2xl space-y-3 p-6">
+          <h2 className="text-lg font-bold text-white print:text-black flex items-center gap-2">
+            <ShoppingBag className="w-5 h-5 text-emerald-400 print:text-black" /> Historial de Transacciones del Día ({report?.ventas.length || 0})
+          </h2>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-gray-900/90 text-gray-400 uppercase text-[11px] font-bold border-b border-gray-800 tracking-wider print:bg-gray-100 print:text-black">
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
-                    No se registran ventas para la fecha seleccionada ({selectedDate}).
-                  </td>
+                  <th className="px-6 py-4">N° Factura</th>
+                  <th className="px-6 py-4">Hora</th>
+                  <th className="px-6 py-4">Cliente / Razón Social</th>
+                  <th className="px-6 py-4">NIT / CI</th>
+                  <th className="px-6 py-4 text-center">Método Pago</th>
+                  <th className="px-6 py-4 text-right">Total</th>
+                  <th className="px-6 py-4 text-center print:hidden">Acciones</th>
                 </tr>
-              ) : (
-                report.ventas.map((sale) => (
-                  <tr key={sale.id} className="hover:bg-gray-800/40 transition-colors">
-                    <td className="px-6 py-4 font-mono font-bold text-emerald-400">{sale.numero_factura}</td>
-                    <td className="px-6 py-4 text-gray-400">{new Date(sale.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                    <td className="px-6 py-4 font-bold text-white uppercase">{sale.razon_social}</td>
-                    <td className="px-6 py-4 font-mono text-gray-400">{sale.nit_ci}</td>
-                    <td className="px-6 py-4 text-center">
-                      <span className="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-gray-800 text-emerald-300 border border-gray-700">
-                        {sale.metodo_pago}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right font-extrabold text-white">Bs. {sale.total.toFixed(2)}</td>
-                    <td className="px-6 py-4 text-center">
-                      <button
-                        onClick={() => {
-                          setSelectedSale(sale);
-                          setTicketOpen(true);
-                        }}
-                        className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-xl text-xs font-bold inline-flex items-center gap-1 border border-emerald-500/30 transition-colors"
-                      >
-                        <Eye className="w-3.5 h-3.5" /> Reimprimir Ticket
-                      </button>
+              </thead>
+              <tbody className="divide-y divide-gray-800/60 font-medium print:divide-gray-300">
+                {!report || report.ventas.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                      No se registran ventas para la fecha seleccionada ({selectedDate}).
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  report.ventas.map((sale) => (
+                    <tr key={sale.id} className="hover:bg-gray-800/40 transition-colors">
+                      <td className="px-6 py-4 font-mono font-bold text-emerald-400 print:text-black">{sale.numero_factura}</td>
+                      <td className="px-6 py-4 text-gray-400 print:text-black">{new Date(sale.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                      <td className="px-6 py-4 font-bold text-white print:text-black uppercase">{sale.razon_social}</td>
+                      <td className="px-6 py-4 font-mono text-gray-400 print:text-black">{sale.nit_ci}</td>
+                      <td className="px-6 py-4 text-center">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-gray-800 text-emerald-300 border border-gray-700 print:bg-transparent print:text-black">
+                          {sale.metodo_pago}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right font-extrabold text-white print:text-black">Bs. {sale.total.toFixed(2)}</td>
+                      <td className="px-6 py-4 text-center print:hidden">
+                        <button
+                          onClick={() => {
+                            setSelectedSale(sale);
+                            setTicketOpen(true);
+                          }}
+                          className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-xl text-xs font-bold inline-flex items-center gap-1 border border-emerald-500/30 transition-colors"
+                        >
+                          <Eye className="w-3.5 h-3.5" /> Reimprimir Ticket
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 

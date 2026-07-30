@@ -136,6 +136,17 @@ export function usePosController(currentUser: User | null) {
     }
   };
 
+  // Resetear NIT a Cliente Anónimo
+  const handleResetCustomer = () => {
+    setCustomerSearchNit('0');
+    setCustomerNotFound(false);
+    setCustomer({
+      id: 'c0',
+      nit_ci: '0',
+      razon_social: 'SIN DATOS / ANÓNIMO',
+    });
+  };
+
   // Registro expres de cliente
   const handleRegisterCustomer = async (razon_social: string, telefono?: string, email?: string) => {
     try {
@@ -169,7 +180,7 @@ export function usePosController(currentUser: User | null) {
     setCart([]);
   };
 
-  // Finalizar cobro
+  // Finalizar cobro y limpiar automáticamente el cliente y carrito para el siguiente cliente
   const handleFinalizeSale = async (paymentMethod: PaymentMethod, montoRecibido: number) => {
     if (!currentUser) {
       showToast('Debes iniciar sesión para procesar la venta.', 'error');
@@ -187,6 +198,10 @@ export function usePosController(currentUser: User | null) {
 
       setCompletedSale(sale);
       setCart([]);
+      
+      // Auto-limpiar NIT y datos de cliente para atender al siguiente de forma rápida
+      handleResetCustomer();
+
       setPaymentModalOpen(false);
       setTicketModalOpen(true);
       showToast('¡Venta procesada con éxito!', 'success');
@@ -216,6 +231,7 @@ export function usePosController(currentUser: User | null) {
     setTicketModalOpen,
     handleBarcodeScanned,
     handleSearchCustomer,
+    handleResetCustomer,
     handleRegisterCustomer,
     handleUpdateQuantity,
     handleRemoveItem,
