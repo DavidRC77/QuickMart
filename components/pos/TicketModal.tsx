@@ -13,7 +13,9 @@ export function TicketModal({ isOpen, sale, onClose }: Props) {
   if (!isOpen || !sale) return null;
 
   const handlePrint = () => {
-    window.print();
+    if (typeof window !== 'undefined') {
+      window.print();
+    }
   };
 
   return (

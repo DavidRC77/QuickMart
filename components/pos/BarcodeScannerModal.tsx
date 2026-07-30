@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { Html5QrcodeScanner } from 'html5-qrcode';
 import { Camera, X } from 'lucide-react';
 
 interface Props {
@@ -11,39 +10,52 @@ interface Props {
 }
 
 export function BarcodeScannerModal({ isOpen, onClose, onScan }: Props) {
-  const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+  const scannerRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || typeof window === 'undefined') return;
 
-    // Inicializar el lector de html5-qrcode
-    const timer = setTimeout(() => {
-      const scanner = new Html5QrcodeScanner(
-        'reader',
-        {
-          fps: 10,
-          qrbox: { width: 280, height: 180 },
-          aspectRatio: 1.5,
-        },
-        /* verbose= */ false
-      );
+    let isMounted = true;
 
-      scanner.render(
-        (decodedText) => {
-          onScan(decodedText);
-        },
-        (errorMessage) => {
-          // Ignorar errores continuos de búsqueda de frame
-        }
-      );
+    // Carga dinámica exclusiva en el navegador para prevenir errores de SSR en Vercel
+    const initScanner = async () => {
+      try {
+        const { Html5QrcodeScanner } = await import('html5-qrcode');
+        if (!isMounted) return;
 
-      scannerRef.current = scanner;
-    }, 200);
+        const scanner = new Html5QrcodeScanner(
+          'reader',
+          {
+            fps: 10,
+            qrbox: { width: 280, height: 180 },
+            aspectRatio: 1.5,
+          },
+          /* verbose= */ false
+        );
+
+        scanner.render(
+          (decodedText) => {
+            if (isMounted) onScan(decodedText);
+          },
+          (errorMessage) => {
+            // Ignorar errores continuos de búsqueda de frame
+          }
+        );
+
+        scannerRef.current = scanner;
+      } catch (err) {
+        console.error('Error cargando lector de código de barras:', err);
+      }
+    };
+
+    const timer = setTimeout(initScanner, 200);
 
     return () => {
+      isMounted = false;
       clearTimeout(timer);
       if (scannerRef.current) {
-        scannerRef.current.clear().catch((err) => console.error('Error al cerrar escáner:', err));
+        scannerRef.current.clear().catch((err: any) => console.error('Error cerrando escáner:', err));
+        scannerRef.current = null;
       }
     };
   }, [isOpen, onScan]);
