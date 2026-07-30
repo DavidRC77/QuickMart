@@ -19,22 +19,49 @@ export function TicketModal({ isOpen, sale, onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="glass-panel w-full max-w-md rounded-3xl p-6 relative border border-emerald-500/30 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
+      <style>{`
+        @media print {
+          @page {
+            size: 80mm auto;
+            margin: 0;
+          }
+          body {
+            margin: 0;
+            padding: 0;
+            background: white;
+          }
+          body > *:not(.fixed) {
+            display: none;
+          }
+          #printable-ticket {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 80mm !important;
+            margin: 0 !important;
+            padding: 5mm !important;
+            box-shadow: none !important;
+            border: none !important;
+            z-index: 9999;
+          }
+        }
+      `}</style>
+      <div className="bg-card text-card-foreground w-full max-w-md rounded-3xl p-6 relative border border-primary/30 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
         {/* Encabezado */}
-        <div className="flex justify-between items-start border-b border-gray-800 pb-4">
+        <div className="flex justify-between items-start border-b border-border pb-4 print:hidden">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-emerald-500/10 rounded-2xl text-emerald-400 border border-emerald-500/20">
+            <div className="p-2.5 bg-primary/10 rounded-2xl text-primary border border-primary/20">
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Venta Exitosa</h3>
-              <p className="text-xs text-gray-400">Comprobante de Venta Emitido</p>
+              <h3 className="text-lg font-bold text-foreground">Venta Exitosa</h3>
+              <p className="text-xs text-muted-foreground">Comprobante de Venta Emitido</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-xl transition-colors"
+            className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -122,16 +149,16 @@ export function TicketModal({ isOpen, sale, onClose }: Props) {
         </div>
 
         {/* Acciones */}
-        <div className="flex gap-3 pt-2">
+        <div className="flex gap-3 pt-2 print:hidden">
           <button
             onClick={onClose}
-            className="w-1/2 py-3 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold rounded-xl text-sm transition-colors"
+            className="w-1/2 py-3 bg-muted hover:bg-muted/80 text-foreground font-semibold rounded-xl text-sm transition-colors"
           >
             Nueva Venta
           </button>
           <button
             onClick={handlePrint}
-            className="w-1/2 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold rounded-xl text-sm shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all"
+            className="w-1/2 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-xl text-sm shadow-md shadow-primary/20 flex items-center justify-center gap-2 transition-all"
           >
             <Printer className="w-5 h-5" /> Imprimir Ticket
           </button>

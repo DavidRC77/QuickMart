@@ -63,18 +63,18 @@ export default function AdminFacturacionPage() {
       {/* Encabezado */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-            <FileText className="w-6 h-6 text-emerald-400" /> Registro de Facturación y Ventas
+          <h1 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-2">
+            <FileText className="w-6 h-6 text-primary" /> Registro de Facturación y Ventas
           </h1>
-          <p className="text-xs text-gray-400 mt-1">Historial completo de comprobantes emitidos con filtros y límites de registros</p>
+          <p className="text-xs text-muted-foreground mt-1">Historial completo de comprobantes emitidos con filtros y límites de registros</p>
         </div>
       </div>
 
       {/* Barra de Filtros, Búsqueda y Selector de Límite (10, 50, 100) */}
-      <div className="glass-panel p-4 rounded-3xl border border-gray-800 flex flex-col lg:flex-row gap-3 items-center">
+      <div className="bg-card text-card-foreground p-4 rounded-3xl border border-border flex flex-col lg:flex-row gap-3 items-center shadow-sm">
         {/* Buscador por Factura o NIT */}
         <div className="relative flex-1 w-full">
-          <Search className="w-5 h-5 text-gray-400 absolute left-3.5 top-3" />
+          <Search className="w-5 h-5 text-muted-foreground absolute left-3.5 top-3" />
           <input
             type="text"
             placeholder="Buscar por N° Factura, NIT/CI o Razón Social..."
@@ -83,13 +83,13 @@ export default function AdminFacturacionPage() {
               setSearchQuery(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full bg-gray-950/80 border border-gray-800 focus:border-emerald-500 text-white rounded-2xl pl-11 pr-4 py-2.5 text-sm outline-none transition-colors"
+            className="w-full bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary text-foreground rounded-2xl pl-11 pr-4 py-2.5 text-sm outline-none transition-colors"
           />
         </div>
 
         {/* Filtro por Fecha */}
         <div className="relative w-full lg:w-48 shrink-0">
-          <Calendar className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" />
+          <Calendar className="w-4 h-4 text-muted-foreground absolute left-3.5 top-3.5" />
           <input
             type="date"
             value={filterDate}
@@ -97,17 +97,17 @@ export default function AdminFacturacionPage() {
               setFilterDate(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full bg-gray-950/80 border border-gray-800 focus:border-emerald-500 text-white rounded-2xl pl-10 pr-3 py-2.5 text-sm outline-none font-bold"
+            className="w-full bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary text-foreground rounded-2xl pl-10 pr-3 py-2.5 text-sm outline-none font-bold"
           />
         </div>
 
         {/* Límite de Registros por Página (10, 50, 100) */}
         <div className="flex items-center gap-2 shrink-0 w-full lg:w-auto justify-end">
-          <span className="text-xs font-semibold text-gray-400">Mostrar:</span>
+          <span className="text-xs font-semibold text-muted-foreground">Mostrar:</span>
           <select
             value={pageSize}
             onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-            className="bg-gray-950/80 border border-gray-800 focus:border-emerald-500 text-white rounded-xl px-3 py-2 text-sm outline-none font-bold"
+            className="bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary text-foreground rounded-xl px-3 py-2 text-sm outline-none font-bold"
           >
             <option value={10}>10 registros</option>
             <option value={50}>50 registros</option>
@@ -118,10 +118,10 @@ export default function AdminFacturacionPage() {
       </div>
 
       {/* Tabla de Facturas */}
-      <div className="glass-panel rounded-3xl border border-gray-800 overflow-hidden shadow-2xl space-y-3">
+      <div className="bg-card text-card-foreground rounded-3xl border border-border overflow-hidden shadow-sm space-y-3">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-gray-900/90 text-gray-400 uppercase text-[11px] font-bold border-b border-gray-800 tracking-wider">
+            <thead className="bg-muted text-muted-foreground uppercase text-[11px] font-bold border-b border-border tracking-wider">
               <tr>
                 <th className="px-6 py-4">N° Factura</th>
                 <th className="px-6 py-4">Fecha y Hora</th>
@@ -132,41 +132,41 @@ export default function AdminFacturacionPage() {
                 <th className="px-6 py-4 text-center">Detalle</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/60 font-medium">
+            <tbody className="divide-y divide-border font-medium">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={7} className="px-6 py-8 text-center text-muted-foreground">
                     Cargando facturas...
                   </td>
                 </tr>
               ) : paginatedSales.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={7} className="px-6 py-8 text-center text-muted-foreground">
                     No se encontraron registros de facturación con los filtros aplicados.
                   </td>
                 </tr>
               ) : (
                 paginatedSales.map((sale) => (
-                  <tr key={sale.id} className="hover:bg-gray-800/40 transition-colors">
-                    <td className="px-6 py-4 font-mono font-extrabold text-emerald-400">{sale.numero_factura}</td>
-                    <td className="px-6 py-4 text-gray-300">
+                  <tr key={sale.id} className="hover:bg-muted/50 transition-colors">
+                    <td className="px-6 py-4 font-mono font-extrabold text-primary">{sale.numero_factura}</td>
+                    <td className="px-6 py-4 text-foreground/80">
                       {new Date(sale.fecha).toLocaleDateString()} {new Date(sale.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </td>
-                    <td className="px-6 py-4 font-bold text-white uppercase">{sale.razon_social}</td>
-                    <td className="px-6 py-4 font-mono text-gray-400">{sale.nit_ci}</td>
+                    <td className="px-6 py-4 font-bold text-foreground uppercase">{sale.razon_social}</td>
+                    <td className="px-6 py-4 font-mono text-muted-foreground">{sale.nit_ci}</td>
                     <td className="px-6 py-4 text-center">
-                      <span className="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-gray-800 text-emerald-300 border border-gray-700">
+                      <span className="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-muted text-primary border border-border">
                         {sale.metodo_pago}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right font-extrabold text-white">Bs. {sale.total.toFixed(2)}</td>
+                    <td className="px-6 py-4 text-right font-extrabold text-foreground">Bs. {sale.total.toFixed(2)}</td>
                     <td className="px-6 py-4 text-center">
                       <button
                         onClick={() => {
                           setSelectedSale(sale);
                           setTicketModalOpen(true);
                         }}
-                        className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-xl text-xs font-bold inline-flex items-center gap-1 border border-emerald-500/30 transition-colors"
+                        className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl text-xs font-bold inline-flex items-center gap-1 border border-primary/30 transition-colors"
                       >
                         <Eye className="w-3.5 h-3.5" /> Ver Comprobante
                       </button>
@@ -179,8 +179,8 @@ export default function AdminFacturacionPage() {
         </div>
 
         {/* Paginación */}
-        <div className="p-4 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-3">
-          <span className="text-xs text-gray-400 font-medium">
+        <div className="p-4 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-3">
+          <span className="text-xs text-muted-foreground font-medium">
             Mostrando {paginatedSales.length} de {filteredSales.length} comprobantes (Página {currentPage} de {totalPages})
           </span>
 
@@ -188,17 +188,17 @@ export default function AdminFacturacionPage() {
             <button
               disabled={currentPage <= 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="p-2 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 rounded-xl text-gray-300 transition-colors"
+              className="p-2 bg-muted hover:bg-muted/80 disabled:opacity-40 rounded-xl text-foreground transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <span className="text-xs font-bold text-white px-2">
+            <span className="text-xs font-bold text-foreground px-2">
               {currentPage} / {totalPages}
             </span>
             <button
               disabled={currentPage >= totalPages}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              className="p-2 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 rounded-xl text-gray-300 transition-colors"
+              className="p-2 bg-muted hover:bg-muted/80 disabled:opacity-40 rounded-xl text-foreground transition-colors"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
