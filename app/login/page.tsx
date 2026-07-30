@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { ShoppingBag, Lock, Mail, ArrowRight, ShieldCheck, UserCheck } from 'lucide-react';
+import { ShoppingBag, Lock, Mail, ArrowRight } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -28,23 +28,9 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoLogin = async (demoEmail: string, demoPass: string) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setError(null);
-    setIsSubmitting(true);
-    try {
-      await login(demoEmail, demoPass);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0b0f17] p-4 relative overflow-hidden">
-      {/* Background glow effects */}
+      {/* Glow ambient background */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -64,7 +50,7 @@ export default function LoginPage() {
         <div className="glass-panel p-8 rounded-3xl border border-gray-800 shadow-2xl space-y-6">
           <div className="border-b border-gray-800 pb-4">
             <h2 className="text-xl font-bold text-white">Iniciar Sesión</h2>
-            <p className="text-xs text-gray-400 mt-1">Ingresa tus credenciales para acceder al sistema</p>
+            <p className="text-xs text-gray-400 mt-1">Ingresa tus credenciales autorizadas para acceder al sistema</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -121,32 +107,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          {/* Quick Demo Access Buttons */}
-          <div className="pt-4 border-t border-gray-800/80 space-y-2">
-            <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block text-center mb-2">
-              Accesos Rápidos de Prueba (Demo)
-            </span>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => handleDemoLogin('admin@quickmart.com', 'admin123')}
-                className="py-2.5 px-3 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all"
-              >
-                <ShieldCheck className="w-4 h-4 text-indigo-400" />
-                <span>Administrador</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleDemoLogin('cajero@quickmart.com', 'cajero123')}
-                className="py-2.5 px-3 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all"
-              >
-                <UserCheck className="w-4 h-4 text-emerald-400" />
-                <span>Cajero</span>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>

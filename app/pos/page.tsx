@@ -23,12 +23,23 @@ import {
 } from 'lucide-react';
 
 export default function POSPage() {
-  const { user } = useAuth(); // Accessible for both Cajero and Admin
+  const { user, loading } = useAuth(); // Requiere autenticación activa
   const pos = usePosController(user);
 
   const [manualSearch, setManualSearch] = useState('');
   const [newCustomerRazon, setNewCustomerRazon] = useState('');
   const [showNewCustomerForm, setShowNewCustomerForm] = useState(false);
+
+  if (loading || !user) {
+    return (
+      <div className="flex-1 flex items-center justify-center bg-[#0b0f17]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-sm font-semibold text-gray-400">Verificando sesión...</span>
+        </div>
+      </div>
+    );
+  }
 
   // Filtrado manual de productos
   const searchResults = pos.products.filter(
@@ -160,7 +171,7 @@ export default function POSPage() {
               }}
               className="text-[11px] font-semibold text-emerald-400 hover:underline"
             >
-              Limpiar
+              Sin Datos (Anónimo)
             </button>
           </div>
 
