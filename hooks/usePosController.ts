@@ -124,6 +124,7 @@ export function usePosController(currentUser: User | null) {
       } else {
         setCustomerNotFound(true);
         setCustomer({
+          id: 'draft',
           nit_ci: nit,
           razon_social: '',
         });

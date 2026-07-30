@@ -5,7 +5,7 @@ import { CustomerModel } from '../../../lib/models/customerModel';
 import { SaleModel } from '../../../lib/models/saleModel';
 import { Customer, Sale } from '../../../lib/models/types';
 import { TicketModal } from '../../../components/pos/TicketModal';
-import { UserCheck, Plus, Search, Edit, Trash2, Check, X, Phone, Mail, FileText, ChevronDown, ChevronUp, ShoppingBag, Calendar, Eye } from 'lucide-react';
+import { UserCheck, Plus, Search, Edit, Trash2, Check, X, Phone, Mail, ChevronDown, ChevronUp, ShoppingBag, Calendar, Eye } from 'lucide-react';
 
 export default function AdminClientesPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -138,7 +138,7 @@ export default function AdminClientesPage() {
           <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
             <UserCheck className="w-6 h-6 text-emerald-400" /> Directorio de Clientes & Historial
           </h1>
-          <p className="text-xs text-gray-400 mt-1">Directorio interactivas en tarjetas con expansión de facturas e historial de compras</p>
+          <p className="text-xs text-gray-400 mt-1">Directorio de tarjetas interactivas con expansión de facturas e historial de compras</p>
         </div>
         <button
           onClick={handleOpenCreate}
@@ -279,7 +279,7 @@ export default function AdminClientesPage() {
                             </div>
                             <div className="pt-1 border-t border-gray-800/60 flex justify-end">
                               <span className="text-[10px] font-bold text-emerald-400 group-hover:underline flex items-center gap-1">
-                                <Eye className="w-3 h-3" /> Ver Comprobante
+                                <Eye className="w-3.5 h-3.5" /> Ver Comprobante
                               </span>
                             </div>
                           </div>
