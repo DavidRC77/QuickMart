@@ -70,9 +70,11 @@ class LocalStore {
     }
   }
 
-  public subscribe(listener: () => void) {
+  public subscribe(listener: () => void): () => void {
     this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
   }
 
   private notify() {
@@ -216,7 +218,7 @@ class LocalStore {
   }
 
   createSale(saleData: Omit<Sale, 'id' | 'numero_factura' | 'fecha'>): Sale {
-    // 1. Verificar stock para TODOS los ítems antes de procesar la venta (Simulación del Trigger de PostgreSQL)
+    // 1. Verificar stock para TODOS los ítems antes de procesar la venta
     for (const item of saleData.detalles) {
       const prod = this.products.find((p) => p.id === item.producto_id);
       if (!prod) {

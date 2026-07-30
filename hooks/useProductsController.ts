@@ -35,7 +35,9 @@ export function useProductsController() {
     const unsubscribe = mockStore.subscribe(() => {
       loadData();
     });
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, [loadData]);
 
   // Filtrado reactivo de productos

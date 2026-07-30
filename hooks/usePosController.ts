@@ -41,7 +41,9 @@ export function usePosController(currentUser: User | null) {
     const unsubscribe = mockStore.subscribe(() => {
       loadProducts();
     });
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, [loadProducts]);
 
   // Escáner de lector físico USB (Hook de captura de código de barras)
@@ -50,7 +52,6 @@ export function usePosController(currentUser: User | null) {
     let lastKeyTime = Date.now();
 
     const handleKeyDown = async (e: KeyboardEvent) => {
-      // Ignorar si el usuario está escribiendo dentro de un input de texto
       const activeElem = document.activeElement;
       if (
         activeElem &&
@@ -84,7 +85,9 @@ export function usePosController(currentUser: User | null) {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [cart]);
 
   // Escanear código mediante la cámara o manual
