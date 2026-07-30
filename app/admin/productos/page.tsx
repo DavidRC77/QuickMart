@@ -171,7 +171,7 @@ export default function AdminProductosPage() {
         <button
           type="button"
           onClick={() => setCategoriesModalOpen(true)}
-          className="px-4 py-2.5 bg-muted hover:bg-muted/80 text-foreground font-bold rounded-2xl text-sm border border-border flex items-center gap-2 transition-colors"
+          className="px-4 py-2.5 bg-card hover:bg-card/80 text-foreground font-bold rounded-2xl text-sm border border-transparent shadow-sm flex items-center gap-2 transition-colors"
         >
           <Tags className="w-4 h-4 text-primary" />
           <span>Gestionar Categorías</span>
@@ -179,7 +179,7 @@ export default function AdminProductosPage() {
       </div>
 
       {/* Buscador + Botón "Nuevo Producto" al lado del buscador */}
-      <div className="bg-card text-card-foreground p-4 rounded-3xl border border-border flex flex-col sm:flex-row gap-3 items-center shadow-sm">
+      <div className="bg-card text-card-foreground p-4 rounded-3xl border border-transparent flex flex-col sm:flex-row gap-3 items-center shadow-sm">
         <div className="relative flex-1 w-full">
           <Search className="w-5 h-5 text-muted-foreground absolute left-3.5 top-3" />
           <input
@@ -213,8 +213,8 @@ export default function AdminProductosPage() {
             onClick={() => setSelectedCategory('all')}
             className={`px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap transition-all border ${
               selectedCategory === 'all'
-                ? 'bg-primary border-primary text-primary-foreground shadow-md shadow-primary/20 scale-105'
-                : 'bg-transparent border-border text-muted-foreground hover:border-primary/50 hover:text-foreground'
+                ? 'bg-primary/15 border-transparent text-primary shadow-sm scale-105'
+                : 'bg-card border-transparent text-muted-foreground hover:text-foreground shadow-sm'
             }`}
           >
             Todas las Categorías
@@ -230,8 +230,8 @@ export default function AdminProductosPage() {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap transition-all border ${
                   isSelected
-                    ? 'bg-primary border-primary text-primary-foreground shadow-md shadow-primary/20 scale-105'
-                    : 'bg-transparent border-border text-muted-foreground hover:border-primary/50 hover:text-foreground'
+                    ? 'bg-primary/15 border-transparent text-primary shadow-sm scale-105'
+                    : 'bg-card border-transparent text-muted-foreground hover:text-foreground shadow-sm'
                 }`}
               >
                 {cat.nombre}
@@ -242,10 +242,10 @@ export default function AdminProductosPage() {
       </div>
 
       {/* Tabla de Productos */}
-      <div className="bg-card text-card-foreground rounded-3xl border border-border overflow-hidden shadow-sm">
+      <div className="bg-card text-card-foreground rounded-3xl border border-transparent overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-muted text-muted-foreground uppercase text-[11px] font-bold border-b border-border tracking-wider">
+            <thead className="bg-background text-muted-foreground uppercase text-[11px] font-bold border-b border-transparent tracking-wider">
               <tr>
                 <th className="px-6 py-4">Código Barras</th>
                 <th className="px-6 py-4">Producto</th>
@@ -256,7 +256,7 @@ export default function AdminProductosPage() {
                 <th className="px-6 py-4 text-center">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border font-medium">
+            <tbody className="divide-y divide-background font-medium">
               {loading ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-8 text-center text-muted-foreground">
@@ -273,7 +273,7 @@ export default function AdminProductosPage() {
                 products.map((prod) => {
                   const isLowStock = prod.stock_actual <= prod.stock_minimo;
                   return (
-                    <tr key={prod.id} className="hover:bg-muted/50 transition-colors">
+                    <tr key={prod.id} className="hover:bg-background transition-colors">
                       <td className="px-6 py-4 font-mono text-primary font-bold">{prod.codigo_barras}</td>
                       <td className="px-6 py-4 font-bold text-foreground">{prod.nombre}</td>
                       <td className="px-6 py-4 text-muted-foreground">{prod.categoria_nombre}</td>
@@ -325,8 +325,8 @@ export default function AdminProductosPage() {
       {/* MODAL 1: GESTIONAR CATEGORÍAS */}
       {categoriesModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="bg-card text-card-foreground w-full max-w-xl rounded-3xl p-6 relative border border-border shadow-2xl space-y-5 max-h-[85vh] flex flex-col">
-            <div className="flex justify-between items-center border-b border-border pb-3">
+          <div className="bg-card text-card-foreground w-full max-w-xl rounded-3xl p-6 relative border border-transparent shadow-2xl space-y-5 max-h-[85vh] flex flex-col">
+            <div className="flex justify-between items-center border-b border-transparent pb-3">
               <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
                 <Tags className="w-6 h-6 text-primary" /> Gestión de Categorías
               </h3>
@@ -336,7 +336,7 @@ export default function AdminProductosPage() {
             </div>
 
             {/* Formulario Registrar / Editar Categoría */}
-            <form onSubmit={handleSaveCategory} className="bg-background p-4 rounded-2xl border border-border space-y-3">
+            <form onSubmit={handleSaveCategory} className="bg-background p-4 rounded-2xl border border-transparent shadow-sm space-y-3">
               <span className="text-xs font-bold text-primary uppercase tracking-wider block">
                 {editingCategory ? 'Editar Categoría' : 'Registrar Nueva Categoría'}
               </span>
@@ -389,7 +389,7 @@ export default function AdminProductosPage() {
                 sortedCategories.map((c) => (
                   <div
                     key={c.id}
-                    className="bg-muted border border-border p-3 rounded-2xl flex items-center justify-between gap-3"
+                    className="bg-background border border-transparent shadow-sm p-3 rounded-2xl flex items-center justify-between gap-3"
                   >
                     <div>
                       <h4 className="text-sm font-bold text-foreground">{c.nombre}</h4>
@@ -428,8 +428,8 @@ export default function AdminProductosPage() {
       {/* MODAL 2: CREAR / EDITAR PRODUCTO (con escáner de cámara integrado) */}
       {productModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="bg-card text-card-foreground w-full max-w-lg rounded-3xl p-6 relative border border-border shadow-2xl space-y-4">
-            <div className="flex justify-between items-center border-b border-border pb-3">
+          <div className="bg-card text-card-foreground w-full max-w-lg rounded-3xl p-6 relative border border-transparent shadow-2xl space-y-4">
+            <div className="flex justify-between items-center border-b border-transparent pb-3">
               <h3 className="text-xl font-bold text-foreground">
                 {editingProduct ? 'Editar Producto' : 'Crear Nuevo Producto'}
               </h3>
