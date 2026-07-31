@@ -56,7 +56,7 @@ export default function LoginPage() {
               <ShoppingBag className="w-7 h-7 text-primary-foreground" />
             </div>
             <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
-              Micro<span className="text-primary">mercado</span>
+              Quick<span className="text-primary">Mart</span>
             </h1>
             <p className="text-sm font-medium text-muted-foreground">Ingresa tus credenciales para continuar</p>
           </div>
