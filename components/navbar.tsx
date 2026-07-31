@@ -19,7 +19,7 @@ export function Navbar({ user, onLogout }: Props) {
   if (pathname === '/login') return null;
 
   return (
-    <header className="bg-card text-card-foreground sticky top-0 z-40 px-4 lg:px-8 py-3">
+    <header className="dark:bg-black bg-card bg-white text-card-foreground sticky top-0 z-40 px-4 lg:px-8 py-3">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <Link href={user?.rol === 'administrador' ? '/admin' : '/pos'} className="flex items-center gap-3 group">

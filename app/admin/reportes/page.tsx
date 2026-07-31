@@ -55,7 +55,7 @@ export default function AdminReportesPage() {
 
           <button
             onClick={handlePrintReport}
-            className="px-4 py-2 bg-muted hover:bg-muted/80 text-foreground font-bold rounded-2xl text-sm border border-border flex items-center gap-2 transition-colors"
+            className="px-4 py-2 bg-muted hover:bg-muted/80 text-foreground font-bold rounded-2xl text-sm border border-transparent flex items-center gap-2 transition-colors"
           >
             <Printer className="w-4 h-4" /> Imprimir Reporte
           </button>
@@ -118,14 +118,14 @@ export default function AdminReportesPage() {
         )}
 
         {/* Tabla de Ventas Registradas en la Fecha */}
-        <div className="bg-card text-card-foreground shadow-sm rounded-3xl border border-border overflow-hidden space-y-3 p-6">
+        <div className="bg-card text-card-foreground shadow-sm rounded-3xl border border-transparent overflow-hidden space-y-3 p-6">
           <h2 className="text-lg font-bold text-foreground print:text-black flex items-center gap-2">
             <ShoppingBag className="w-5 h-5 text-primary print:text-black" /> Historial de Transacciones del Día ({report?.ventas.length || 0})
           </h2>
 
           <div className="overflow-x-auto print:overflow-visible">
             <table className="w-full text-left text-sm print:text-xs">
-              <thead className="bg-muted text-muted-foreground uppercase text-[11px] font-bold border-b border-border tracking-wider print:bg-gray-100 print:text-black">
+              <thead className="bg-background text-muted-foreground uppercase text-[11px] font-bold border-b border-transparent tracking-wider print:bg-gray-100 print:text-black">
                 <tr>
                   <th className="px-6 py-4">N° Factura</th>
                   <th className="px-6 py-4">Hora</th>
@@ -136,7 +136,7 @@ export default function AdminReportesPage() {
                   <th className="px-6 py-4 text-center print:hidden">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border font-medium print:divide-gray-300">
+              <tbody className="divide-y divide-background font-medium print:divide-gray-300">
                 {!report || report.ventas.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="px-6 py-8 text-center text-muted-foreground">
@@ -151,7 +151,7 @@ export default function AdminReportesPage() {
                       <td className="px-6 py-4 font-bold text-foreground print:text-black uppercase">{sale.razon_social}</td>
                       <td className="px-6 py-4 font-mono text-muted-foreground print:text-black">{sale.nit_ci}</td>
                       <td className="px-6 py-4 text-center">
-                        <span className="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-muted text-primary border border-border print:bg-transparent print:text-black">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-muted text-primary border border-transparent print:bg-transparent print:text-black">
                           {sale.metodo_pago}
                         </span>
                       </td>

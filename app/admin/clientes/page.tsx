@@ -149,7 +149,7 @@ export default function AdminClientesPage() {
       </div>
 
       {/* Buscador */}
-      <div className="bg-card text-card-foreground p-4 rounded-3xl border border-border shadow-sm">
+      <div className="bg-card text-card-foreground p-4 rounded-3xl border border-transparent shadow-sm">
         <div className="relative">
           <Search className="w-5 h-5 text-muted-foreground absolute left-3.5 top-3" />
           <input
@@ -165,7 +165,7 @@ export default function AdminClientesPage() {
       {/* LISTA DE CLIENTES EN TARJETAS EXPANDIBLES */}
       <div className="space-y-3">
         {filteredCustomers.length === 0 ? (
-          <div className="bg-card text-card-foreground p-8 rounded-3xl border border-border text-center text-muted-foreground shadow-sm">
+          <div className="bg-card text-card-foreground p-8 rounded-3xl border border-transparent text-center text-muted-foreground shadow-sm">
             No se encontraron clientes registrados.
           </div>
         ) : (
@@ -179,7 +179,7 @@ export default function AdminClientesPage() {
               <div
                 key={c.id}
                 className={`bg-card text-card-foreground rounded-3xl border transition-all overflow-hidden shadow-sm ${
-                  isExpanded ? 'border-primary/50 bg-muted/40' : 'border-border hover:border-primary/50'
+                  isExpanded ? 'border-primary/50 bg-muted/40' : 'border-transparent hover:border-primary/50'
                 }`}
               >
                 {/* Cabecera de la Tarjeta (Click para expandir) */}
@@ -211,7 +211,7 @@ export default function AdminClientesPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 pt-2 sm:pt-0 border-border">
+                  <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 pt-2 sm:pt-0 border-transparent">
                     <div className="text-left sm:text-right">
                       <span className="text-[10px] font-bold text-muted-foreground uppercase block">Total Compras</span>
                       <span className="text-sm font-extrabold text-foreground">Bs. {totalGasto.toFixed(2)} ({customerSales.length} facturas)</span>
@@ -243,7 +243,7 @@ export default function AdminClientesPage() {
 
                 {/* HISTORIAL DE FACTURAS EXPANDIBLE */}
                 {isExpanded && (
-                  <div className="px-5 pb-5 pt-3 border-t border-border bg-muted/30 space-y-3 animate-in fade-in duration-200">
+                  <div className="px-5 pb-5 pt-3 border-t border-transparent bg-muted/30 space-y-3 animate-in fade-in duration-200">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
                         <ShoppingBag className="w-4 h-4" /> Historial de Facturas Emitidas ({customerSales.length})
@@ -262,7 +262,7 @@ export default function AdminClientesPage() {
                               setSelectedSale(sale);
                               setTicketModalOpen(true);
                             }}
-                            className="bg-muted/50 border border-border hover:border-primary/50 p-3.5 rounded-2xl cursor-pointer transition-all space-y-2 group"
+                            className="bg-muted/50 border border-transparent hover:border-primary/50 p-3.5 rounded-2xl cursor-pointer transition-all space-y-2 group"
                           >
                             <div className="flex justify-between items-start">
                               <span className="font-mono text-xs font-extrabold text-primary">{sale.numero_factura}</span>
@@ -277,7 +277,7 @@ export default function AdminClientesPage() {
                               </span>
                               <span className="text-sm font-extrabold text-foreground">Bs. {sale.total.toFixed(2)}</span>
                             </div>
-                            <div className="pt-1 border-t border-border/60 flex justify-end">
+                            <div className="pt-1 border-t border-transparent flex justify-end">
                               <span className="text-[10px] font-bold text-primary group-hover:underline flex items-center gap-1">
                                 <Eye className="w-3.5 h-3.5" /> Ver Comprobante
                               </span>
@@ -297,8 +297,8 @@ export default function AdminClientesPage() {
       {/* Modal Crear/Editar Cliente */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="bg-card text-card-foreground w-full max-w-md rounded-3xl p-6 relative border border-border shadow-2xl space-y-4">
-            <div className="flex justify-between items-center border-b border-border pb-3">
+          <div className="bg-card text-card-foreground w-full max-w-md rounded-3xl p-6 relative border border-transparent shadow-2xl space-y-4">
+            <div className="flex justify-between items-center border-b border-transparent pb-3">
               <h3 className="text-xl font-bold text-foreground">
                 {editingCustomer ? 'Editar Cliente' : 'Registrar Nuevo Cliente'}
               </h3>

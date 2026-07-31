@@ -32,7 +32,7 @@ export default function AdminFacturacionPage() {
     loadSales();
   }, []);
 
-  // Filtrar por búsqueda (n° factura, NIT, cliente) y fecha
+
   const filteredSales = useMemo(() => {
     return sales.filter((s) => {
       const matchesSearch =
@@ -60,7 +60,7 @@ export default function AdminFacturacionPage() {
 
   return (
     <div className="space-y-6">
-      {/* Encabezado */}
+
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground tracking-tight flex items-center gap-2">
@@ -71,7 +71,7 @@ export default function AdminFacturacionPage() {
       </div>
 
       {/* Barra de Filtros, Búsqueda y Selector de Límite (10, 50, 100) */}
-      <div className="bg-card text-card-foreground p-4 rounded-3xl border border-border flex flex-col lg:flex-row gap-3 items-center shadow-sm">
+      <div className="bg-card text-card-foreground p-4 rounded-3xl flex flex-col lg:flex-row gap-3 items-center shadow-sm">
         {/* Buscador por Factura o NIT */}
         <div className="relative flex-1 w-full">
           <Search className="w-5 h-5 text-muted-foreground absolute left-3.5 top-3" />
@@ -83,7 +83,7 @@ export default function AdminFacturacionPage() {
               setSearchQuery(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary text-foreground rounded-2xl pl-11 pr-4 py-2.5 text-sm outline-none transition-colors"
+            className="w-full bg-background  border-input focus:border-primary focus:ring-1 focus:ring-primary text-foreground rounded-2xl pl-11 pr-4 py-2.5 text-sm outline-none transition-colors"
           />
         </div>
 
@@ -118,7 +118,7 @@ export default function AdminFacturacionPage() {
       </div>
 
       {/* Tabla de Facturas */}
-      <div className="bg-card text-card-foreground rounded-3xl border border-border overflow-hidden shadow-sm space-y-3">
+      <div className="bg-card text-card-foreground rounded-3xl overflow-hidden shadow-sm space-y-3">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="bg-muted text-muted-foreground uppercase text-[11px] font-bold border-b border-border tracking-wider">
@@ -132,7 +132,7 @@ export default function AdminFacturacionPage() {
                 <th className="px-6 py-4 text-center">Detalle</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border font-medium">
+            <tbody className="font-medium">
               {loading ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-8 text-center text-muted-foreground">

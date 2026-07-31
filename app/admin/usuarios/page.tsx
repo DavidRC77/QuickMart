@@ -136,7 +136,7 @@ export default function AdminUsuariosPage() {
       {/* Grid de Usuarios */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {users.map((u) => (
-          <div key={u.id} className="bg-card text-card-foreground p-5 rounded-3xl border border-border space-y-4 hover:border-primary/50 transition-all shadow-sm">
+          <div key={u.id} className="bg-card text-card-foreground p-5 rounded-3xl border border-transparent space-y-4 hover:border-primary/50 transition-all shadow-sm">
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-3">
                 <div className={`p-3 rounded-2xl border ${
@@ -176,7 +176,7 @@ export default function AdminUsuariosPage() {
               </div>
             </div>
 
-            <div className="pt-2 border-t border-border space-y-1.5 text-xs text-muted-foreground">
+            <div className="pt-2 border-t border-transparent space-y-1.5 text-xs text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-muted-foreground" />
                 <span>{u.email}</span>
@@ -197,8 +197,8 @@ export default function AdminUsuariosPage() {
       {/* Modal Crear / Editar Empleado */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="bg-card text-card-foreground w-full max-w-lg rounded-3xl p-6 relative border border-border shadow-2xl space-y-4">
-            <div className="flex justify-between items-center border-b border-border pb-3">
+          <div className="bg-card text-card-foreground w-full max-w-lg rounded-3xl p-6 relative border border-transparent shadow-2xl space-y-4">
+            <div className="flex justify-between items-center border-b border-transparent pb-3">
               <h3 className="text-xl font-bold text-foreground">
                 {editingUser ? 'Editar Empleado' : 'Registrar Nuevo Personal'}
               </h3>

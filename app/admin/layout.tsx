@@ -9,10 +9,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (loading || !user) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#0b0f17]">
+      <div className="flex-1 flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-sm font-semibold text-gray-400">Verificando permisos de Administrador...</span>
+          <span className="text-sm font-semibold text-muted-foreground">Verificando permisos de Administrador...</span>
         </div>
       </div>
     );

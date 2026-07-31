@@ -71,7 +71,7 @@ export default function POSPage() {
       {/* COLUMNA IZQUIERDA: Cliente primero, luego Buscador/Cámara y Resultados (7 Cols) */}
       <div className="lg:col-span-7 space-y-4 flex flex-col">
         {/* 1. SECCIÓN SUPERIOR: Datos de Facturación / Cliente */}
-        <div className="bg-card text-card-foreground p-5 rounded-3xl border border-border space-y-3 shadow-sm">
+        <div className="bg-card text-card-foreground p-5 rounded-3xl border border-transparent space-y-3 shadow-sm">
           <div className="flex justify-between items-center">
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
               <User className="w-4 h-4 text-primary" /> Facturación / Datos del Cliente
@@ -137,7 +137,7 @@ export default function POSPage() {
               )}
             </div>
           ) : (
-            <div className="p-3 bg-muted border border-border rounded-2xl flex justify-between items-center">
+            <div className="p-3 bg-muted border border-transparent rounded-2xl flex justify-between items-center">
               <div>
                 <span className="text-[10px] text-muted-foreground uppercase font-bold block">Razón Social / Nombre</span>
                 <span className="text-sm font-bold text-foreground uppercase">{pos.customer.razon_social}</span>
@@ -148,7 +148,7 @@ export default function POSPage() {
         </div>
 
         {/* 2. BARRA DE BÚSQUEDA MANUAL & ESCÁNER DE CÁMARA */}
-        <div className="bg-card text-card-foreground p-4 rounded-3xl border border-border flex flex-col sm:flex-row gap-3 items-center shadow-sm">
+        <div className="bg-card text-card-foreground p-4 rounded-3xl border border-transparent flex flex-col sm:flex-row gap-3 items-center shadow-sm">
           <div className="relative flex-1 w-full">
             <Search className="w-5 h-5 text-muted-foreground absolute left-3.5 top-3" />
             <input
@@ -171,7 +171,7 @@ export default function POSPage() {
         </div>
 
         {/* 3. RESULTADOS DE LA BÚSQUEDA */}
-        <div className="bg-card text-card-foreground p-5 rounded-3xl border border-border flex-1 flex flex-col min-h-[300px] shadow-sm">
+        <div className="bg-card text-card-foreground p-5 rounded-3xl border border-transparent flex-1 flex flex-col min-h-[300px] shadow-sm">
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
               <Barcode className="w-4 h-4 text-primary" /> Resultados de Búsqueda
@@ -205,7 +205,7 @@ export default function POSPage() {
                     pos.handleBarcodeScanned(product.codigo_barras);
                     setManualSearch('');
                   }}
-                  className={`bg-background p-4 rounded-2xl border border-border cursor-pointer flex flex-col justify-between space-y-3 ${
+                  className={`bg-background p-4 rounded-2xl border border-transparent cursor-pointer flex flex-col justify-between space-y-3 ${
                     product.stock_actual <= 0
                       ? 'opacity-50 border-destructive/20 bg-destructive/10 cursor-not-allowed'
                       : 'hover:border-primary/40 hover:shadow-md transition-all'
@@ -220,7 +220,7 @@ export default function POSPage() {
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                           product.stock_actual <= product.stock_minimo
                             ? 'bg-destructive/20 text-destructive border border-destructive/30'
-                            : 'bg-muted text-muted-foreground border border-border'
+                            : 'bg-muted text-muted-foreground border border-transparent'
                         }`}
                       >
                         Stock: {product.stock_actual} u.
@@ -230,7 +230,7 @@ export default function POSPage() {
                     <p className="text-[11px] text-muted-foreground font-mono">Cód: {product.codigo_barras}</p>
                   </div>
 
-                  <div className="flex justify-between items-center pt-2 border-t border-border">
+                  <div className="flex justify-between items-center pt-2 border-t border-transparent">
                     <span className="text-lg font-extrabold text-foreground">Bs. {product.precio_venta.toFixed(2)}</span>
                     <button
                       type="button"
@@ -249,7 +249,7 @@ export default function POSPage() {
 
       {/* COLUMNA DERECHA: Carrito de Compras y Procesamiento de Pago (5 Cols) */}
       <div className="lg:col-span-5 space-y-4 flex flex-col">
-        <div className="bg-card text-card-foreground p-5 rounded-3xl border border-border flex-1 flex flex-col justify-between shadow-sm">
+        <div className="bg-card text-card-foreground p-5 rounded-3xl border border-transparent flex-1 flex flex-col justify-between shadow-sm">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
               <ShoppingCart className="w-4 h-4 text-primary" /> Carrito de Compras ({pos.totals.itemCount})
@@ -275,7 +275,7 @@ export default function POSPage() {
               pos.cart.map((item) => (
                 <div
                   key={item.producto.id}
-                  className="bg-background border border-border p-3 rounded-2xl flex items-center justify-between gap-2 hover:border-primary/40 transition-colors"
+                  className="bg-background border border-transparent p-3 rounded-2xl flex items-center justify-between gap-2 hover:border-primary/40 transition-colors"
                 >
                   <div className="flex-1 min-w-0">
                     <h4 className="text-xs font-bold text-foreground truncate">{item.producto.nombre}</h4>
@@ -283,7 +283,7 @@ export default function POSPage() {
                   </div>
 
                   {/* Controles de Cantidad */}
-                  <div className="flex items-center gap-1.5 bg-muted p-1 rounded-xl border border-border">
+                  <div className="flex items-center gap-1.5 bg-muted p-1 rounded-xl border border-transparent">
                     <button
                       type="button"
                       onClick={() => pos.handleUpdateQuantity(item.producto.id, item.cantidad - 1)}
@@ -318,7 +318,7 @@ export default function POSPage() {
           </div>
 
           {/* Resumen de Total & Botón Procesar Pago */}
-          <div className="pt-4 border-t border-border space-y-4">
+          <div className="pt-4 border-t border-transparent space-y-4">
             <div className="flex justify-between items-end">
               <div>
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Total a Pagar</span>
